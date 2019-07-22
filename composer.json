@@ -1,0 +1,26 @@
+{
+  "name": "eman-development-design/spaces-api-client",
+  "description": "A PHP 7 client for Digital Ocean's Spaces API",
+  "keywords": ["spaces", "digital ocean", "Digital Ocean", "client"],
+  "homepage": "http://emandevelopmentdesign.com",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ed Lomonaco",
+      "email": "emandevelopmentdesign@gmail.com",
+      "role": "developer"
+    }
+  ],
+  "version": "1.0.0",
+  "require": {
+    "php": "^7.2.0",
+    "ext-mongodb": "*",
+    "symfony/http-client": "^4.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Edd\\SpacesApiClient\\": "src/"
+    }
+  }
+}
