@@ -18,9 +18,17 @@
     "ext-mongodb": "*",
     "symfony/http-client": "^4.3"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^8.2"
+  },
   "autoload": {
     "psr-4": {
       "Edd\\SpacesApiClient\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Edd\\SpacesApiClient\\Tests\\": "tests/"
     }
   }
 }

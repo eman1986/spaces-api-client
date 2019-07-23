@@ -74,7 +74,7 @@ abstract class BaseClient
      * @param string $region
      * @throws \Exception
      */
-    public function __construct(string $accessKey, string $secret, string $host, string $space = '', string $region = 'nc3')
+    public function __construct(string $accessKey, string $secret, string $host, string $space = '', string $region = 'nyc3')
     {
         $this->currentDateTime = new DateTime('UTC');
         $this->http = HttpClient::create();
@@ -83,8 +83,6 @@ abstract class BaseClient
         $this->host = $host;
         $this->space = $space;
         $this->region = $region;
-
-        $iso8601Date = $this->currentDateTime->format('Ymd\THis\Z');
     }
 
     /**
@@ -97,11 +95,11 @@ abstract class BaseClient
     protected function BuildHeaders(string $requestUri, string $queryString = '', string $method = 'GET', string $data = '') : array
     {
         $reqDate = $this->currentDateTime->format('Ymd');
-        $reqDateTime = $this->currentDateTime->format('Ymd\THis\Z');
+        $iso8601Date = $this->currentDateTime->format('Ymd\THis\Z');
 
         // Canonical headers
         $this->canonicalHeaders[] = 'host:' . $this->host;
-        $this->canonicalHeaders[] = 'x-amz-date:' . $reqDateTime;
+        $this->canonicalHeaders[] = 'x-amz-date:' . $iso8601Date;
         $canonicalHeadersStr = implode("\n", $this->canonicalHeaders);
 
         // Hashed Payload
@@ -121,7 +119,7 @@ abstract class BaseClient
         // String to sign
         $stringToSign = [];
         $stringToSign[] = 'AWS4-HMAC-SHA256';
-        $stringToSign[] = $reqDateTime;
+        $stringToSign[] = $iso8601Date;
         $stringToSign[] = sprintf('%s/%s/s3/aws4_request', $reqDate, $this->region);
         $stringToSign[] = $canonicalRequestHashed;
         $stringToSignStr = implode("\n", $stringToSign);
@@ -139,7 +137,7 @@ abstract class BaseClient
             sprintf('authorization: AWS4-HMAC-SHA256 Credential=%s, SignedHeaders=%s, Signature=%s', $credential, $this->signedHeaders, $signature),
             sprintf('host:%s', $this->host),
             sprintf('x-amz-content-sha256:%s', $hashedPayload),
-            sprintf('x-amz-date:%s', $reqDateTime)
+            sprintf('x-amz-date:%s', $iso8601Date)
         ];
     }
 }
