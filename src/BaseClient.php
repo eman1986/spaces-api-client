@@ -2,7 +2,7 @@
 /**
  * This file is part of the spaces-api-client package.
  *
- * (c) 2019 Eman Development & Design
+ * (c) 2020 Ed Lomonaco
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,6 +13,9 @@ namespace Edd\SpacesApiClient;
 
 use DateTime;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class BaseClient
@@ -66,6 +69,11 @@ abstract class BaseClient
     protected $http;
 
     /**
+     * @var \Symfony\Component\Serializer\Serializer
+     */
+    protected $serializer;
+
+    /**
      * BaseClient constructor.
      * @param string $accessKey
      * @param string $secret
@@ -83,6 +91,12 @@ abstract class BaseClient
         $this->host = $host;
         $this->space = $space;
         $this->region = $region;
+
+        // setup the serializer
+        $encoders = [new XmlEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $this->serializer = new Serializer($normalizers, $encoders);
     }
 
     /**

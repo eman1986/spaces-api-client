@@ -2,7 +2,7 @@
 /**
  * This file is part of the spaces-api-client package.
  *
- * (c) 2019 Eman Development & Design
+ * (c) 2020 Ed Lomonaco
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -101,5 +101,64 @@ class Bucket extends BaseClient
             ]);
 
         return $response->getContent();
+    }
+
+    /**
+     * Get a Bucket's Region
+     * @param string $bucket
+     * @return string
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
+    public function GetBucketRegion(string $bucket) : string
+    {
+        $response = $this->http->request('GET', sprintf('%s.%s.digitaloceanspaces.com?location', $bucket, $this->region),
+            [
+                'headers' => $this->BuildHeaders('/', 'location')
+            ]);
+
+        return $response->getContent();
+    }
+
+    /**
+     * Get a Bucket's ACLs
+     * @param string $bucket
+     * @return string
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
+    public function GetBucketAcl(string $bucket) : string
+    {
+        $response = $this->http->request('GET', sprintf('%s.%s.digitaloceanspaces.com?acl', $bucket, $this->region),
+            [
+                'headers' => $this->BuildHeaders('/', 'acl')
+            ]);
+
+        return $response->getContent();
+    }
+
+    public function SetBucketAcl(string $bucket) : string
+    {
+
+    }
+
+    /**
+     * Delete an empty bucket
+     * @param string $bucket
+     * @return int
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
+    public function Delete(string $bucket) : int
+    {
+        $response = $this->http->request('DELETE', sprintf('%s.%s.digitaloceanspaces.com', $bucket, $this->region),
+            [
+                'headers' => $this->BuildHeaders('/')
+            ]);
+
+        return $response->getStatusCode();
     }
 }
