@@ -2,7 +2,7 @@
 /**
  * This file is part of the spaces-api-client package.
  *
- * (c) 2020 Ed Lomonaco
+ * (c) 2023 Ed Lomonaco
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,72 +16,30 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * Class BaseClient
- * @package Edd\SpacesApiClient
- */
 abstract class BaseClient
 {
-    /**
-     * @var \DateTime
-     */
-    protected $currentDateTime;
+    protected DateTime $currentDateTime;
 
-    /**
-     * @var string
-     */
-    protected $accessKey;
+    protected string $accessKey;
 
-    /**
-     * @var string
-     */
-    protected $secret;
+    protected string $secret;
 
-    /**
-     * @var string
-     */
-    protected $space = '';
+    protected string $space = '';
 
-    /**
-     * @var string
-     */
-    protected $region = 'nyc3';
+    protected string $region = 'nyc3';
 
-    /**
-     * @var string
-     */
-    protected $host;
+    protected string $host;
 
-    /**
-     * @var string
-     */
-    protected $signedHeaders = 'host;x-amz-date';
+    protected string $signedHeaders = 'host;x-amz-date';
 
-    /**
-     * @var array
-     */
-    protected $canonicalHeaders = [];
+    protected array $canonicalHeaders = [];
 
-    /**
-     * @var \Symfony\Contracts\HttpClient\HttpClientInterface
-     */
-    protected $http;
+    protected HttpClientInterface $http;
 
-    /**
-     * @var \Symfony\Component\Serializer\Serializer
-     */
-    protected $serializer;
+    protected readonly Serializer $serializer;
 
-    /**
-     * BaseClient constructor.
-     * @param string $accessKey
-     * @param string $secret
-     * @param string $host
-     * @param string $space
-     * @param string $region
-     * @throws \Exception
-     */
     public function __construct(string $accessKey, string $secret, string $host, string $space = '', string $region = 'nyc3')
     {
         $this->currentDateTime = new DateTime('UTC');
@@ -106,7 +64,7 @@ abstract class BaseClient
      * @param string $data
      * @return array
      */
-    protected function BuildHeaders(string $requestUri, string $queryString = '', string $method = 'GET', string $data = '') : array
+    protected function BuildHeaders(string $requestUri, string $queryString = '', string $method = 'GET', string $data = ''): array
     {
         $reqDate = $this->currentDateTime->format('Ymd');
         $iso8601Date = $this->currentDateTime->format('Ymd\THis\Z');
@@ -128,7 +86,7 @@ abstract class BaseClient
         $canonicalRequest[] = $this->signedHeaders;
         $canonicalRequest[] = $hashedPayload;
 
-        $canonicalRequestHashed = hash('sha256', utf8_encode(implode("\n", $canonicalRequest)));
+        $canonicalRequestHashed = hash('sha256', mb_convert_encoding(implode("\n", $canonicalRequest), 'UTF-8'));
 
         // String to sign
         $stringToSign = [];
@@ -139,8 +97,8 @@ abstract class BaseClient
         $stringToSignStr = implode("\n", $stringToSign);
 
         // Hash Keys
-        $datekey = hash_hmac('sha256', $reqDate, 'AWS4'. $this->secret, true);
-        $dateRegionKey = hash_hmac('sha256', $this->region, $datekey, true);
+        $dateKey = hash_hmac('sha256', $reqDate, 'AWS4'. $this->secret, true);
+        $dateRegionKey = hash_hmac('sha256', $this->region, $dateKey, true);
         $dateRegionServiceKey = hash_hmac('sha256', 's3', $dateRegionKey, true);
         $signingKey = hash_hmac('sha256', 'aws4_request', $dateRegionServiceKey, true);
 

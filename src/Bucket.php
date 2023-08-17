@@ -23,7 +23,7 @@ class Bucket extends BaseClient
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function Create(string $bucketName, string $acl = 'private') : string
+    public function Create(string $bucketName, string $acl = 'private'): string
     {
         if ($acl !== 'private')
         {
@@ -69,7 +69,7 @@ class Bucket extends BaseClient
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function ListBucketContents(string $delimiter = '', string $prefix = '', string $marker = '', int $maxKeys = 1000) : string
+    public function ListBucketContents(string $delimiter = '', string $prefix = '', string $marker = '', int $maxKeys = 1000): string
     {
         $queryStrArr = [];
 
@@ -112,7 +112,7 @@ class Bucket extends BaseClient
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function GetBucketRegion(string $bucket) : string
+    public function GetBucketRegion(string $bucket): string
     {
         $response = $this->http->request('GET', sprintf('%s.%s.digitaloceanspaces.com?location', $bucket, $this->region),
             [
@@ -131,7 +131,7 @@ class Bucket extends BaseClient
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function GetBucketAcl(string $bucket) : string
+    public function GetBucketAcl(string $bucket): string
     {
         $response = $this->http->request('GET', sprintf('%s.%s.digitaloceanspaces.com?acl', $bucket, $this->region),
             [
@@ -141,9 +141,9 @@ class Bucket extends BaseClient
         return $response->getContent();
     }
 
-    public function SetBucketAcl(string $bucket) : string
+    public function SetBucketAcl(string $bucket): string
     {
-
+        return ''; // TODO:
     }
 
     /**
@@ -152,7 +152,7 @@ class Bucket extends BaseClient
      * @return int
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function Delete(string $bucket) : int
+    public function Delete(string $bucket): int
     {
         $response = $this->http->request('DELETE', sprintf('%s.%s.digitaloceanspaces.com', $bucket, $this->region),
             [

@@ -1,36 +1,37 @@
 {
-  "name": "eman-development-design/spaces-api-client",
-  "description": "A PHP 7 client for Digital Ocean's Spaces API",
-  "keywords": ["spaces", "digital ocean", "Digital Ocean", "client"],
-  "homepage": "http://emandevelopmentdesign.com",
-  "type": "library",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Ed Lomonaco",
-      "email": "emandevelopmentdesign@gmail.com",
-      "role": "developer"
+    "name": "eman-development-design/spaces-api-client",
+    "description": "A PHP client for Digital Ocean's Spaces API.",
+    "keywords": ["spaces", "digital ocean", "Digital Ocean", "client"],
+    "homepage": "https://edlomonaco.dev",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ed Lomonaco",
+            "email": "emandevelopmentdesign@gmail.com",
+            "role": "developer"
+        }
+    ],
+    "version": "1.0.0",
+    "require": {
+        "php": "^8.2",
+        "ext-mbstring": "*",
+        "symfony/http-client": "^6.3",
+        "symfony/property-access": "^6.3",
+        "symfony/property-info": "^6.3",
+        "symfony/serializer": "^6.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Edd\\SpacesApiClient\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Edd\\SpacesApiClient\\Tests\\": "tests/"
+        }
     }
-  ],
-  "version": "1.0.0",
-  "require": {
-    "php": "^7.2.5",
-    "symfony/http-client": "^5.0",
-      "symfony/property-access": "^5.0",
-      "symfony/property-info": "^5.0",
-      "symfony/serializer": "^5.0"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^8.5"
-  },
-  "autoload": {
-    "psr-4": {
-      "Edd\\SpacesApiClient\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Edd\\SpacesApiClient\\Tests\\": "tests/"
-    }
-  }
 }
